@@ -3,3 +3,6 @@
 
 #Ignore all learning materials
 /Learning
+
+#Ignore all pycache
+/__pycache__
