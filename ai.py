@@ -1,50 +1,45 @@
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain.schema import (SystemMessage, HumanMessage, AIMessage)
-
+from langchain.schema import (SystemMessage, HumanMessage)
+import database_utils as dbUtils
 from Prompt import Prompt
 from Model import Model
+from message_helper import MessageHelper as messagehelper
 
 
 load_dotenv()
+
 open_ai_key = os.getenv("OPEN_AI_KEY")
 chat = ChatOpenAI(
     openai_api_key = open_ai_key,
     model = Model.GPT4_PREVIEW.value
 )
 
-messages = []
-messages.append(SystemMessage(content=Prompt.MAIN_PROMPT.value))
 
-def answer_question(user_question):
-    global gpt_tokens, prompt_tokens, total_tokens
+def answer_question(user_question, user_phoneno):
+    user_id = None
+    messages = []
+    messages.append(SystemMessage(content=Prompt.MAIN_PROMPT.value))
+    dbHistory = dbUtils.getMessageHistory(user_phoneno)
+
+    if not dbHistory:
+        #Creating new user
+        user_id = dbUtils.add_new_user(user_phoneno)
+    else:
+        messages.extend(dbHistory)
+        user_id = dbUtils.getUserId(user_phoneno)
+    
     messages.append(HumanMessage(content=user_question))
+
     response = chat.invoke(messages)
-    gpt_tokens += response.response_metadata['token_usage']['completion_tokens']
-    prompt_tokens += response.response_metadata['token_usage']['prompt_tokens']
-    total_tokens += response.response_metadata['token_usage']['total_tokens']
-    messages.append(AIMessage(content=response.content))
-    # print(f"gpt_token: {response.response_metadata['token_usage']['completion_tokens']}")
-    # print(f"prompt: {response.response_metadata['token_usage']['prompt_tokens']}")
-    # print(f"Total tokens: {response.response_metadata['token_usage']['total_tokens']}")
+    
+    updateDB(user_question, user_id, response)
+
     return response.content
 
+def updateDB(user_question, user_id, response):
+    dbUtils.update_db_conversation(user_id=user_id, type=messagehelper.HUMAN.value,convo=user_question )
+    dbUtils.update_db_conversation(user_id=user_id, type=messagehelper.AI.value,convo=response.content )
 
-print("Welcome to the Krishna Chatbot!")
-
-gpt_tokens = 0
-prompt_tokens = 0
-total_tokens = 0
-
-while True:
-    user_question = input("\nYou: ")
-    if user_question.lower() == "quit":
-        print(f"Final completions tokens : {gpt_tokens}")
-        print(f"Final prompt tokens : {prompt_tokens}")
-        print(f"Overall tokens : {total_tokens}")
-        break
-    response = answer_question(user_question)
-    print(f"Krishna: {response}")
-
-
+    
