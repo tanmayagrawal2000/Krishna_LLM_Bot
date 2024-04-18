@@ -1,5 +1,7 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
+import ai as AI
+import whatsapp_helper as whatsappHelper
 
 app = Flask(__name__)
 
@@ -8,14 +10,11 @@ def bot():
     incoming_msg = request.values.get('Body', '').lower()
     resp = MessagingResponse()
     msg = resp.message()
-    responded = False
+    incoming_number = whatsappHelper.filter_user_number(request.values.get('From', ''))
 
-    if 'hello' in incoming_msg:
-        msg.body('Hi there! How can I help you today?')
-        responded = True
-
-    if not responded:
-        msg.body("I'm not sure how to respond to that. Can you try asking something else?")
+    ai_response = AI.answer_question(incoming_msg, incoming_number)
+    
+    msg.body(ai_response)
 
     return str(resp)
 

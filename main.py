@@ -28,6 +28,6 @@ async def whatsapp_webhook(request: Request):
 
 
 
-r = AI.answer_question("Kya aap hi Ram hai?", 6030)
-print(r)
+# r = AI.answer_question("Kya aap hi Ram hai?", 6030)
+# print(r)
 
