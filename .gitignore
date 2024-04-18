@@ -9,3 +9,5 @@
 
 #Ignore database
 .db
+
+venv/

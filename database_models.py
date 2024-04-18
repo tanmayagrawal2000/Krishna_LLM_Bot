@@ -7,8 +7,8 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = "user"
-    usr_id = Column(Integer, autoincrement=True, index= True)
-    usr_phn = Column(Integer, primary_key=True,nullable= False)
+    usr_id = Column(Integer, autoincrement=True, index= True, primary_key=True)
+    usr_phn = Column(Integer,nullable= False)
 
 class Data(Base):
     __tablename__ = "data"
