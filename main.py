@@ -13,18 +13,21 @@ app = FastAPI()
 async def whatsapp_webhook(request: Request):
     form_data = await request.form()
     message_body = form_data.get('Body', '').lower()
+    print(message_body)
     resp = MessagingResponse()
     if message_body == 'hello':
         db = SessionLocal()
         count = db.query(User).count()
         db.close()
-        resp.message(f'There are currently {count} items in the database.')
+        print("Hi")
+        resp.message("There are currently 5 items in the database")
     else:
         resp.message('Send "hello" to get the count of items in the database.')
+    print(str(resp))
     return str(resp)
 
 
 
-r = AI.answer_question("I want to kill myself", 6000)
+r = AI.answer_question("Kya aap hi Ram hai?", 6030)
 print(r)
 
