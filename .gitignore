@@ -8,6 +8,6 @@
 /__pycache__
 
 #Ignore database
-.db
+test.db
 
 venv/
