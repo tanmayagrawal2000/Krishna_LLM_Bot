@@ -20,8 +20,8 @@ def bot():
     print(type(incoming_number))
 
     ai_response = AI.answer_question(incoming_msg, incoming_number)
-    
-    msg.body(ai_response)
+    whatsapp_response = whatsappHelper.add_linebreak_and_quote(ai_response)
+    msg.body(whatsapp_response)
 
     return str(resp)
 
