@@ -13,7 +13,8 @@ load_dotenv()
 open_ai_key = os.getenv("OPEN_AI_KEY")
 chat = ChatOpenAI(
     openai_api_key = open_ai_key,
-    model = Model.GPT4.value
+    model = Model.GPT4.value,
+    temperature=1
 )
 
 
