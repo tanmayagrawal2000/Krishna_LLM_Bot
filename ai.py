@@ -37,7 +37,7 @@ def answer_question(user_question, user_phoneno):
     
     updateDB(user_question, user_id, response)
 
-    return response.content + str(len(dbHistory))
+    return response.content
 
 def updateDB(user_question, user_id, response):
     dbUtils.update_db_conversation(user_id=user_id, type=messagehelper.HUMAN.value,convo=user_question )
