@@ -17,7 +17,6 @@ def bot():
     incoming_number = whatsappHelper.filter_user_number(request.values.get('From', ''))
     print(type(incoming_msg))
     print(incoming_msg)
-    print(type(incoming_number))
 
     ai_response = AI.answer_question(incoming_msg, incoming_number)
     whatsapp_response = whatsappHelper.add_linebreak_and_quote(ai_response)
