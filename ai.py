@@ -36,6 +36,7 @@ def answer_question(user_question, user_phoneno):
     response = chat.invoke(messages)
     
     updateDB(user_question, user_id, response)
+    print(len(dbHistory))
 
     return response.content
 
