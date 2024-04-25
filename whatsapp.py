@@ -20,7 +20,7 @@ def sms_reply():
 
     return str(resp)
 
-def bot():
+def bot(request):
     incoming_msg = request.values.get('Body', '').lower()
     
     incoming_number = whatsappHelper.filter_user_number(request.values.get('From', ''))
